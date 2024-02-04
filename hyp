@@ -1,0 +1,66 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+dt_confusion=(confusion_matrix(y_test, y_pred))
+
+ax = sns.heatmap(dt_confusion/np.sum(dt_confusion), annot=True, fmt='.2%', cmap='Purples')
+ax.set_title(' Decision Tree Confusion Matrix with labels\n\n');
+ax.set_xlabel('\nPredicted Attacks')
+ax.set_ylabel('Actual Attacks');
+ax.xaxis.set_ticklabels(['Benign','DDoS'])
+ax.yaxis.set_ticklabels(['Benign','DDoS'])
+
+plt.show()
+
+
+
+from sklearn.neighbors import KNeighborsClassifier
+
+
+knn_model = KNeighborsClassifier()
+knn_model.fit(X_train, y_train)
+print('Accuracy for KNN: ', knn_model.score(X_test, y_test)*100)
+knn_pred = knn_model.predict(X_test)
+knn_confusion=(confusion_matrix(y_test, knn_pred))
+print(confusion_matrix(y_test, knn_pred)) #print confusion matrix
+print(classification_report(y_test, knn_pred)) #print report
+
+
+gbc_model = GradientBoostingClassifier()
+gbc_model.fit(X_train, y_train)
+print('Accuracy for Gradient Boosting Classifier: ', gbc_model.score(X_test, y_test)*100)
+gbc_pred = gbc_model.predict(X_test)
+gbc_confusion = confusion_matrix(y_test, gbc_pred)
+print('Confusion Matrix for GBoost \n')
+print(gbc_confusion)
+print(classification_report(y_test, gbc_pred))
+
+
+from sklearn.ensemble import RandomForestClassifier
+rf_model = RandomForestClassifier()
+rf_model.fit(X_train, y_train)
+print('Accuracy for RF: ', rf_model.score(X_test, y_test)*100)
+rf_pred = rf_model.predict(X_test)
+rf_confusion = confusion_matrix(y_test, rf_pred)
+print('Confusion Matrix for Random Forest \n')
+print(rf_confusion)
+print(classification_report(y_test, rf_pred))
+
+
+X = dataset.iloc[:,0:-1]  #independent columns
+y = dataset.iloc[:,-1]    #target column 
+
+from sklearn.model_selection import train_test_split #Import Sklearn function train_test_split to spilt the dataset for training and testing
+
+
+# Splitting the resampled dataset
+X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.20)#split dataset using 80:20 ratio 80% for training and 20% for testing
+
+from sklearn import tree #Load classifier function from sklearn library
+clf = tree.DecisionTreeClassifier(criterion= "entropy") #Configure classifier
+classify=clf.fit(X_train, y_train) #Apply classifier to training dataset 
+y_pred = classify.predict(X_test)#Evaluate model by testing using the test dataset
+
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score #import functions for result presentation and evaluation
+print(confusion_matrix(y_test, y_pred)) #print confusion matrix
+print(classification_report(y_test,y_pred)) #print report
+print(accuracy_score(y_test, y_pred)) #print accuracy
